@@ -26,17 +26,17 @@ CREATE TABLE "Bild" ( `ID` INTEGER, `artikelID` INTEGER NOT NULL, `name` TEXT NO
 
 CREATE TABLE "Kunde" ( `email` TEXT CHECK(email LIKE '%_@_%.__%'), `adresseID` INTEGER NOT NULL, `vorname` TEXT NOT NULL CHECK(vorname GLOB '*[a-zA-Z]' AND LENGTH ( vorname ) > 0), `nachname` TEXT NOT NULL CHECK(nachname GLOB '*[a-zA-Z]' AND LENGTH ( nachname ) > 0), `passwort` TEXT NOT NULL CHECK(passwort LIKE '%______%'), PRIMARY KEY(`email`), FOREIGN KEY(`adresseID`) REFERENCES `Adresse`(`ID`) );
 
-CREATE TABLE "Lieferabo" ( `warenkorbID` INTEGER, `beginn` DATE NOT NULL CHECK(date ( beginn ) IS NOT NULL), `ende` DATE NOT NULL CHECK(date ( ende ) IS NOT NULL AND beginn<=ende), `lieferintervall` INTEGER NOT NULL CHECK(lieferintervall > 0), FOREIGN KEY(`warenkorbID`) REFERENCES `Warenkorb`(`ID`), PRIMARY KEY(`warenkorbID`) );
+CREATE TABLE "Lieferabo" ( `warenkorbID` INTEGER, `beginn` VARCHAR NOT NULL CHECK(date ( beginn ) IS NOT NULL), `ende` VARCHAR NOT NULL CHECK(date ( ende ) IS NOT NULL AND date(beginn)<=date(ende)), `lieferintervall` INTEGER NOT NULL CHECK(lieferintervall > 0), FOREIGN KEY(`warenkorbID`) REFERENCES `Warenkorb`(`ID`), PRIMARY KEY(`warenkorbID`) );
 
 CREATE TABLE "Lieferdienst" ( `bezeichnung` TEXT CHECK(bezeichnung LIKE '_%'), `tarif` REAL NOT NULL CHECK(tarif >= 0), PRIMARY KEY(`bezeichnung`) );
 
-CREATE TABLE "Newsletter" ( `ID` INTEGER PRIMARY KEY AUTOINCREMENT, `angestellterKundeEmail` TEXT NOT NULL, `betreff` TEXT NOT NULL CHECK(betreff LIKE '_%'), `text` TEXT NOT NULL CHECK(text LIKE '_%'), `datum` DATE NOT NULL CHECK(date(datum) IS NOT NULL), FOREIGN KEY(`angestellterKundeEmail`) REFERENCES `Angestellter`(`kundeEmail`) );
+CREATE TABLE "Newsletter" ( `ID` INTEGER PRIMARY KEY AUTOINCREMENT, `angestellterKundeEmail` TEXT NOT NULL, `betreff` TEXT NOT NULL CHECK(betreff LIKE '_%'), `text` TEXT NOT NULL CHECK(text LIKE '_%'), `datum` VARCHAR NOT NULL CHECK(date(datum) IS NOT NULL), FOREIGN KEY(`angestellterKundeEmail`) REFERENCES `Angestellter`(`kundeEmail`) );
 
-CREATE TABLE "Premiumkunde" ( `kundeEmail` TEXT, `studentenausweis` BLOB CHECK(studentenausweis IS NOT NULL OR gebuehr = 1), `gebuehr` INTEGER NOT NULL CHECK(gebuehr = 0 || gebuehr = 1), `ablaufdatum` DATE NOT NULL CHECK(date(ablaufdatum) IS NOT NULL), FOREIGN KEY(`kundeEmail`) REFERENCES `Kunde`(`email`), PRIMARY KEY(`kundeEmail`) );
+CREATE TABLE "Premiumkunde" ( `kundeEmail` TEXT, `studentenausweis` BLOB CHECK(studentenausweis IS NOT NULL OR gebuehr = 1), `gebuehr` INTEGER NOT NULL CHECK(gebuehr = 0 || gebuehr = 1), `ablaufdatum` VARCHAR NOT NULL CHECK(date(ablaufdatum) IS NOT NULL), FOREIGN KEY(`kundeEmail`) REFERENCES `Kunde`(`email`), PRIMARY KEY(`kundeEmail`) );
 
 CREATE TABLE "Schlagwort" ( `wort` TEXT collate nocase CHECK(wort GLOB '*[a-zA-Z]' AND LENGTH(wort) > 0), PRIMARY KEY(`wort`) );
 
-CREATE TABLE "Warenkorb" ( `ID` INTEGER, `kundeEmail` TEXT NOT NULL, `bestelldatum` DATE NOT NULL CHECK(date(bestelldatum) IS NOT NULL), `bestellstatus` TEXT NOT NULL CHECK(bestellstatus = 'versendet' OR bestellstatus = 'abgeschlossen' OR bestellstatus = 'versandfertig' OR bestellstatus = 'in Bearbeitung' OR bestellstatus = 'storniert'), FOREIGN KEY(`kundeEmail`) REFERENCES `Kunde`(`email`), PRIMARY KEY(`ID`) );
+CREATE TABLE "Warenkorb" ( `ID` INTEGER, `kundeEmail` TEXT NOT NULL, `bestelldatum` VARCHAR NOT NULL CHECK(date(bestelldatum) IS NOT NULL), `bestellstatus` TEXT NOT NULL CHECK(bestellstatus = 'versendet' OR bestellstatus = 'abgeschlossen' OR bestellstatus = 'versandfertig' OR bestellstatus = 'in Bearbeitung' OR bestellstatus = 'storniert'), FOREIGN KEY(`kundeEmail`) REFERENCES `Kunde`(`email`), PRIMARY KEY(`ID`) );
 
 CREATE TABLE `angemeldet` ( `kundeEmail` TEXT, `newsletterID` INTEGER, FOREIGN KEY(`kundeEmail`) REFERENCES "Kunde"(`email`), PRIMARY KEY(`kundeEmail`,`newsletterID`), FOREIGN KEY(`newsletterID`) REFERENCES `Newsletter`(`ID`) );
 
@@ -50,7 +50,7 @@ CREATE TABLE `enthaelt` ( `newsletterID` INTEGER, `artikelID` INTEGER, FOREIGN K
 
 CREATE TABLE "inw" ( `warenkorbID` INTEGER, `angebotID` INTEGER, `anbieterBezeichnung` TEXT, `anzahl` INTEGER NOT NULL CHECK(anzahl > 0), FOREIGN KEY(`angebotID`) REFERENCES `Angebot`(`ID`), FOREIGN KEY(`warenkorbID`) REFERENCES `Warenkorb`(`ID`), PRIMARY KEY(`warenkorbID`,`angebotID`,`anbieterBezeichnung`), FOREIGN KEY(`anbieterBezeichnung`) REFERENCES `Anbieter`(`bezeichnung`) );
 
-CREATE TABLE "zustellen" ( `warenkorbID` INTEGER, `lieferdienstBezeichnung` TEXT, `datum` DATE NOT NULL CHECK(date ( datum ) IS NOT NULL AND datum>date('now')), FOREIGN KEY(`lieferdienstBezeichnung`) REFERENCES `Lieferdienst`(`bezeichnung`), PRIMARY KEY(`warenkorbID`,`lieferdienstBezeichnung`), FOREIGN KEY(`warenkorbID`) REFERENCES `Warenkorb`(`ID`) );
+CREATE TABLE "zustellen" ( `warenkorbID` INTEGER, `lieferdienstBezeichnung` TEXT, `datum` VARCHAR NOT NULL CHECK(date ( datum ) IS NOT NULL AND date(datum)>date('now')), FOREIGN KEY(`lieferdienstBezeichnung`) REFERENCES `Lieferdienst`(`bezeichnung`), PRIMARY KEY(`warenkorbID`,`lieferdienstBezeichnung`), FOREIGN KEY(`warenkorbID`) REFERENCES `Warenkorb`(`ID`) );
 
 CREATE TRIGGER update_existing_newsletter_date AFTER UPDATE ON Newsletter FOR EACH ROW WHEN NEW.datum != OLD.datum
 BEGIN
