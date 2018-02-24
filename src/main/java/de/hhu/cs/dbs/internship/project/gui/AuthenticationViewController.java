@@ -35,10 +35,9 @@ public class AuthenticationViewController extends com.alexanderthelen.applicatio
     @Override
     public void registerUser(Data data) throws SQLException {
         // Schema: Kunde(email,adresseID,vorname,nachname,passwort)
-        String insertKunde = "INSERT INTO Kunde VALUES(?,?,?,?,?)";
+        String insertKunde = "INSERT INTO Kunde VALUES(?,(SELECT COUNT(*) FROM Adresse),?,?,?)";
         // Schema: Adresse(ID,plz,ort,straße,hausnummer)
-        String insertAdresse = "INSERT INTO Adresse(plz,ort,straße,hausnummer) VALUES(?,?,?,?)";
-        // TODO: Alle IDs auf AUTOINCREMENT stellen? Die neuste ID wäre dann immer die höchste, solange beide inserts gleichzeitig ausgeführt werden
+        String insertAdresse = "INSERT INTO Adresse(ID,plz,ort,straße,hausnummer) VALUES((SELECT COUNT(*) FROM Adresse)+1,?,?,?,?)";
 
         PreparedStatement insertKundeStatement = Project.getInstance().getConnection().prepareStatement(insertKunde);
         PreparedStatement insertAdresseStatement = Project.getInstance().getConnection().prepareStatement(insertAdresse);
@@ -46,6 +45,8 @@ public class AuthenticationViewController extends com.alexanderthelen.applicatio
         if(!data.get("password1").toString().equals(data.get("password2").toString())){
             throw new SQLException(getClass().getName() + "Passwörter stimmen nicht überein");
         }
+        // disable auto commit so both inserts are treated as one single transaction
+        Project.getInstance().getConnection().getRawConnection().setAutoCommit(false);
 
         insertAdresseStatement.setString(1, data.get("zipCode").toString());
         insertAdresseStatement.setString(2, data.get("city").toString());
@@ -53,13 +54,14 @@ public class AuthenticationViewController extends com.alexanderthelen.applicatio
         insertAdresseStatement.setInt(4, Integer.parseInt(data.get("houseNumber").toString()));
 
         insertKundeStatement.setString(1, data.get("eMail").toString());
-        insertKundeStatement.setInt(2, insertAdresseStatement.getGeneratedKeys().getInt("ID"));
-        insertKundeStatement.setString(3, data.get("firstName").toString());
-        insertKundeStatement.setString(4, data.get("lastName").toString());
-        insertKundeStatement.setString(5, data.get("password").toString());
+        insertKundeStatement.setString(2, data.get("firstName").toString());
+        insertKundeStatement.setString(3, data.get("lastName").toString());
+        insertKundeStatement.setString(4, data.get("password1").toString());
 
-        insertKundeStatement.execute();
         insertAdresseStatement.execute();
-        //throw new SQLException(getClass().getName() + ".registerUser(Data) nicht implementiert.");
+        insertKundeStatement.execute();
+
+        Project.getInstance().getConnection().getRawConnection().commit();
+        Project.getInstance().getConnection().getRawConnection().setAutoCommit(true);
     }
 }
