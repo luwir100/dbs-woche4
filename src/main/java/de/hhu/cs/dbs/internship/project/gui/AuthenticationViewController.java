@@ -25,10 +25,10 @@ public class AuthenticationViewController extends com.alexanderthelen.applicatio
         PreparedStatement statement = Project.getInstance().getConnection().prepareStatement(query);
         statement.setString(1, data.get("email").toString());
         ResultSet resultSet = statement.executeQuery();
-        if(resultSet.getString(1).equals(data.get("password").toString())){
+        if (resultSet.getString(1).equals(data.get("password").toString())) {
+            assignRights(data.get("email").toString());
             Project.getInstance().getData().put("email", data.get("email").toString());
-        }
-        else throw new SQLException(getClass().getName() + "Falsche Eingabe");
+        } else throw new SQLException(getClass().getName() + ": Falsche Eingabe");
         //  Eigene SQL-Exception werfen, falls Kunde nicht in DB vorhanden? momentan wird SQLException: ResultSet closed geworfen.
     }
 
@@ -42,8 +42,8 @@ public class AuthenticationViewController extends com.alexanderthelen.applicatio
         PreparedStatement insertKundeStatement = Project.getInstance().getConnection().prepareStatement(insertKunde);
         PreparedStatement insertAdresseStatement = Project.getInstance().getConnection().prepareStatement(insertAdresse);
 
-        if(!data.get("password1").toString().equals(data.get("password2").toString())){
-            throw new SQLException(getClass().getName() + "Passwörter stimmen nicht überein");
+        if (!data.get("password1").toString().equals(data.get("password2").toString())) {
+            throw new SQLException(getClass().getName() + ": Passwörter stimmen nicht überein");
         }
         // disable auto commit so both inserts are treated as one single transaction
         Project.getInstance().getConnection().getRawConnection().setAutoCommit(false);
@@ -63,5 +63,15 @@ public class AuthenticationViewController extends com.alexanderthelen.applicatio
 
         Project.getInstance().getConnection().getRawConnection().commit();
         Project.getInstance().getConnection().getRawConnection().setAutoCommit(true);
+    }
+
+    private void assignRights(String user) throws SQLException {
+        String query = "SELECT COUNT(*) FROM Angestellter WHERE Angestellter.kundeEmail ='" + user + "'";
+        PreparedStatement statement = Project.getInstance().getConnection().prepareStatement(query);
+        statement.execute();
+        ResultSet resultSet = statement.getResultSet();
+        if (resultSet.getInt(1) > 0) {
+            Project.getInstance().getData().put("rights", "angestellter");
+        } else Project.getInstance().getData().put("rights", "kunde");
     }
 }
