@@ -4,6 +4,7 @@ import com.alexanderthelen.applicationkit.database.Table;
 import com.alexanderthelen.applicationkit.gui.TableViewController;
 import com.alexanderthelen.applicationkit.gui.ViewController;
 import de.hhu.cs.dbs.internship.project.table.account.Account;
+import de.hhu.cs.dbs.internship.project.table.artikel.Artikel;
 import javafx.scene.control.TreeItem;
 
 import java.io.IOException;
@@ -40,6 +41,17 @@ public class MasterViewController extends com.alexanderthelen.applicationkit.gui
         treeItem.setExpanded(true);
         treeItems.add(treeItem);
 
+        table = new Artikel();
+        table.setTitle("Artikel");
+        try{
+            tableViewController = TableViewController.createWithNameAndTable("artikel", table);
+            tableViewController.setTitle("Artikel");
+        }catch (IOException e){
+            tableViewController = null;
+        }
+        treeItem = new TreeItem<>(tableViewController);
+        treeItem.setExpanded(true);
+        treeItems.add(treeItem);
         /*
         table = new Favorites();
         table.setTitle("Favoriten");
