@@ -4,7 +4,7 @@ import com.alexanderthelen.applicationkit.database.Table;
 import com.alexanderthelen.applicationkit.gui.TableViewController;
 import com.alexanderthelen.applicationkit.gui.ViewController;
 import de.hhu.cs.dbs.internship.project.table.account.Account;
-import de.hhu.cs.dbs.internship.project.table.artikel.Artikel;
+import de.hhu.cs.dbs.internship.project.table.angebot.Angebot;
 import javafx.scene.control.TreeItem;
 
 import java.io.IOException;
@@ -41,11 +41,11 @@ public class MasterViewController extends com.alexanderthelen.applicationkit.gui
         treeItem.setExpanded(true);
         treeItems.add(treeItem);
 
-        table = new Artikel();
-        table.setTitle("Artikel");
+        table = new Angebot();
+        table.setTitle("Angebote");
         try{
-            tableViewController = TableViewController.createWithNameAndTable("artikel", table);
-            tableViewController.setTitle("Artikel");
+            tableViewController = TableViewController.createWithNameAndTable("angebot", table);
+            tableViewController.setTitle("Angebote");
         }catch (IOException e){
             tableViewController = null;
         }
