@@ -16,7 +16,7 @@ public class Newsletter extends Table{
 
     @Override
     public String getSelectQueryForRowWithData(Data data) throws SQLException {
-        if(data.get("Newsletter.ID")==null) return "SELECT NULL AS betreff, NULL AS text";
+        if(data.get("Newsletter.ID")==null)return "SELECT NULL AS betreff, NULL AS text";
         if(Project.getInstance().getData().get("rights").toString().equals("angestellter")){
             return "SELECT ID,betreff,text,datum,angestellterKundeEmail as Verfasser FROM Newsletter WHERE Newsletter.ID=" + data.get("Newsletter.ID").toString();
         }

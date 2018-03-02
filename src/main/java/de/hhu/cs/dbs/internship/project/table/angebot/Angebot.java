@@ -19,6 +19,7 @@ public class Angebot extends Table {
 
     @Override
     public String getSelectQueryForRowWithData(Data data) throws SQLException {
+        /*
         try{
             int id = Integer.parseInt(data.get("Artikel.ID").toString());
             String s = "SELECT COUNT(*) FROM Bild WHERE Bild.artikelID =" + id;
@@ -36,12 +37,16 @@ public class Angebot extends Table {
                         "WHERE Artikel.ID =" + id;
             }
         }
-        catch (NullPointerException e){
+        /*catch (NullPointerException e){
             return "SELECT NULL AS bezeichnung, NULL AS preis, NULL AS beschreibung, NULL as bild, NULL AS Anbieter, NULL as bestand " +
                     "FROM Artikel JOIN Angebot ON Artikel.ID=Angebot.artikelID " +
                     "JOIN Bild ON Artikel.ID=Bild.artikelID JOIN bietet ON Angebot.ID=bietet.angebotID";
+        }*/
+        return "SELECT bezeichnung,preis,beschreibung,bild,anbieterBezeichnung as Anbieter,bestand " +
+                "FROM Artikel JOIN Angebot ON Artikel.ID=Angebot.artikelID " +
+                "JOIN Bild ON Artikel.ID=Bild.artikelID JOIN bietet ON Angebot.ID=bietet.angebotID " +
+                "WHERE Artikel.ID =" + data.get("Artikel.ID");
         }
-    }
 
     @Override
     public void insertRowWithData(Data data) throws SQLException {

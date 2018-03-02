@@ -4,7 +4,9 @@ import com.alexanderthelen.applicationkit.database.Table;
 import com.alexanderthelen.applicationkit.gui.TableViewController;
 import com.alexanderthelen.applicationkit.gui.ViewController;
 import de.hhu.cs.dbs.internship.project.table.account.Account;
+import de.hhu.cs.dbs.internship.project.table.account.Bestellung;
 import de.hhu.cs.dbs.internship.project.table.angebot.Angebot;
+import de.hhu.cs.dbs.internship.project.table.newsletter.Anmeldungen;
 import de.hhu.cs.dbs.internship.project.table.newsletter.Newsletter;
 import javafx.scene.control.TreeItem;
 
@@ -30,6 +32,7 @@ public class MasterViewController extends com.alexanderthelen.applicationkit.gui
         TableViewController tableViewController;
         Table table;
 
+        // Account
         table = new Account();
         table.setTitle("Account");
         try {
@@ -42,6 +45,19 @@ public class MasterViewController extends com.alexanderthelen.applicationkit.gui
         treeItem.setExpanded(true);
         treeItems.add(treeItem);
 
+        // Account.Warenkörbe
+        table = new Bestellung();
+        table.setTitle("Bestellungen");
+        try{
+            tableViewController = TableViewController.createWithNameAndTable("bestellungen", table);
+            tableViewController.setTitle("Bestellungen");
+        }catch (IOException e){
+            tableViewController = null;
+        }
+        subTreeItem = new TreeItem<>(tableViewController);
+        treeItem.getChildren().add(subTreeItem);
+
+        // Angebote
         table = new Angebot();
         table.setTitle("Angebote");
         try{
@@ -54,6 +70,7 @@ public class MasterViewController extends com.alexanderthelen.applicationkit.gui
         treeItem.setExpanded(true);
         treeItems.add(treeItem);
 
+        // Newsletter
         table = new Newsletter();
         table.setTitle("Newsletter");
         try{
@@ -65,6 +82,18 @@ public class MasterViewController extends com.alexanderthelen.applicationkit.gui
         treeItem = new TreeItem<>(tableViewController);
         treeItem.setExpanded(true);
         treeItems.add(treeItem);
+
+        // Newsletter.Anmeldungen
+        table = new Anmeldungen();
+        table.setTitle("Anmeldungen");
+        try{
+            tableViewController = TableViewController.createWithNameAndTable("anmeldungen", table);
+            tableViewController.setTitle("Anmeldungen");
+        }catch (IOException e){
+            tableViewController = null;
+        }
+        subTreeItem = new TreeItem<>(tableViewController);
+        treeItem.getChildren().add(subTreeItem);
         /*
         table = new Favorites();
         table.setTitle("Favoriten");
