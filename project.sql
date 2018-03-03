@@ -42,7 +42,7 @@ CREATE TABLE `angemeldet` ( `kundeEmail` TEXT, `newsletterID` INTEGER, FOREIGN K
 
 CREATE TABLE `besitzt` ( `artikelID` INTEGER, `schlagwortWort` TEXT, FOREIGN KEY(`schlagwortWort`) REFERENCES `Schlagwort`(`wort`), FOREIGN KEY(`artikelID`) REFERENCES `Artikel`(`ID`), PRIMARY KEY(`artikelID`,`schlagwortWort`) );
 
-CREATE TABLE "bietet" ( `anbieterBezeichnung` TEXT, `angebotID` INTEGER, `bestand` INTEGER NOT NULL CHECK(bestand > 0), PRIMARY KEY(`anbieterBezeichnung`,`angebotID`), FOREIGN KEY(`angebotID`) REFERENCES `Angebot`(`ID`), FOREIGN KEY(`anbieterBezeichnung`) REFERENCES `Anbieter`(`bezeichnung`) );
+CREATE TABLE "bietet" ( `anbieterBezeichnung` TEXT, `angebotID` INTEGER, `bestand` INTEGER NOT NULL CHECK(bestand >= 0), PRIMARY KEY(`anbieterBezeichnung`,`angebotID`), FOREIGN KEY(`angebotID`) REFERENCES `Angebot`(`ID`), FOREIGN KEY(`anbieterBezeichnung`) REFERENCES `Anbieter`(`bezeichnung`) );
 
 CREATE TABLE "empfiehlt" ( `artikel1ID` INTEGER, `artikel2ID` INTEGER CHECK(artikel1ID != artikel2ID), FOREIGN KEY(`artikel2ID`) REFERENCES `Artikel`(`ID`), PRIMARY KEY(`artikel1ID`,`artikel2ID`), FOREIGN KEY(`artikel1ID`) REFERENCES `Artikel`(`ID`) );
 
@@ -116,12 +116,15 @@ INSERT INTO Kunde(email,adresseID,vorname,nachname,passwort) VALUES ('mosc000@ya
 INSERT INTO Kunde(email,adresseID,vorname,nachname,passwort) VALUES ('viho00@xaj.org',9,'Viola','Hoffmann','password');
 INSERT INTO Kunde(email,adresseID,vorname,nachname,passwort) VALUES ('roba000@ldl.nl',10,'Rolf','Bauer','password');
 INSERT INTO Kunde(email,adresseID,vorname,nachname,passwort) VALUES ('javo000@gmail.com',11,'Jana','Vogt','password');
+INSERT INTO Kunde(email,adresseID,vorname,nachname,passwort) VALUES ('test@gmail.com',11,'Test','User','password');
+INSERT INTO Kunde(email,adresseID,vorname,nachname,passwort) VALUES ('testa@gmail.com',11,'Test','User','password');
 
 INSERT INTO Angestellter(kundeEmail,gehalt,jobbezeichnung) VALUES ('hemü000@gmail.com','100000.00','Systemadministrator');
 INSERT INTO Angestellter(kundeEmail,gehalt,jobbezeichnung) VALUES ('tabe000@gmx.de','75000.00','Systemadministrator');
 INSERT INTO Angestellter(kundeEmail,gehalt,jobbezeichnung) VALUES ('viho00@xaj.org','60000.00','Webdesigner');
 INSERT INTO Angestellter(kundeEmail,gehalt,jobbezeichnung) VALUES ('roba000@ldl.nl','0.00','Praktikant');
 INSERT INTO Angestellter(kundeEmail,gehalt,jobbezeichnung) VALUES ('isfi000@web.de','50000.00','Manager');
+INSERT INTO Angestellter(kundeEmail,gehalt,jobbezeichnung) VALUES ('testa@gmail.com','0.00','Tester');
 
 INSERT INTO Lieferdienst(bezeichnung,tarif) VALUES('Packet Ltd.','5.00');
 INSERT INTO Lieferdienst(bezeichnung,tarif) VALUES('Deutsche Post','6.00');

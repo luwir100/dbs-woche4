@@ -11,17 +11,28 @@ public class Bestellung extends Table{
 
     @Override
     public String getSelectQueryForTableWithFilter(String s) throws SQLException {
-        return  "SELECT Warenkorb.ID,kundeEmail as Besitzer, bestelldatum, bestellstatus " +
-                "FROM Warenkorb " +
-                "WHERE kundeEmail='" + Project.getInstance().getData().get("email").toString() + "'";
+        if(Project.getInstance().getData().get("rights").toString().equals("angestellter")){
+            if(s == null || s.isEmpty()){
+                return "SELECT Warenkorb.ID,kundeEmail as Besitzer, bestelldatum, bestellstatus " +
+                        "FROM Warenkorb " +
+                        "WHERE bestellstatus <> 'in Bearbeitung' AND kundeEmail NOT IN (SELECT kundeEmail FROM Angestellter " +
+                        "WHERE kundeEmail <>'" + Project.getInstance().getData().get("email").toString() +"')";
+            }
+            else{
+                return "SELECT Warenkorb.ID,kundeEmail as Besitzer, bestelldatum, bestellstatus " +
+                        "FROM Warenkorb " +
+                        "WHERE bestellstatus <> 'in Bearbeitung' AND kundeEmail LIKE '%" + s + "%' AND kundeEmail NOT IN " +
+                        "(SELECT kundeEmail FROM Angestellter " +
+                        "WHERE kundeEmail <>'" + Project.getInstance().getData().get("email").toString() +"')";
+            }
+        }
+        else return "SELECT Warenkorb.ID,kundeEmail as Besitzer, bestelldatum, bestellstatus " +
+                    "FROM Warenkorb " +
+                    "WHERE kundeEmail='" + Project.getInstance().getData().get("email").toString() + "'";
     }
 
     @Override
     public String getSelectQueryForRowWithData(Data data) throws SQLException {
-        /*return "SELECT Warenkorb.ID,kundeEmail as Besitzer, bestelldatum, bestellstatus, bezeichnung AS enthält, anzahl " +
-                "FROM Warenkorb JOIN inw ON Warenkorb.ID=inw.warenkorbID JOIN Angebot ON AngebotID=inw.angebotID JOIN Artikel ON Angebot.artikelID=Artikel.ID " +
-                "WHERE kundeEmail='" + Project.getInstance().getData().get("email").toString() + "' " +
-                "GROUP BY Warenkorb.ID";*/
         return  "SELECT Warenkorb.ID,kundeEmail as Besitzer, bestelldatum, bestellstatus " +
                 "FROM Warenkorb " +
                 "WHERE Warenkorb.ID=" + data.get("Warenkorb.ID");
@@ -40,14 +51,23 @@ public class Bestellung extends Table{
     @Override
     public void updateRowWithData(Data data, Data data1) throws SQLException {
         if(Project.getInstance().getData().get("rights").toString().equals("angestellter")){
-            // nur bestellstatus darf verändert werden
             String s = "UPDATE Warenkorb SET bestellstatus = ? WHERE Warenkorb.ID ='" + data.get("Warenkorb.ID") +"'";
 
             PreparedStatement updateWarekorb = Project.getInstance().getConnection().prepareStatement(s);
             updateWarekorb.setString(1, data1.get("Warenkorb.bestellstatus").toString());
             updateWarekorb.execute();
         }
-        else throw new SQLException(getClass().getName() + ": Insuffiziente Rechte");
+        else{
+            if (data.get("Warenkorb.bestellstatus").toString().equals("in Bearbeitung")
+                    && data1.get("Warenkorb.bestellstatus").toString().equals("versandfertig")){
+                String s = "UPDATE Warenkorb SET bestellstatus = ? WHERE Warenkorb.ID ='" + data.get("Warenkorb.ID") +"'";
+
+                PreparedStatement updateWarekorb = Project.getInstance().getConnection().prepareStatement(s);
+                updateWarekorb.setString(1, data1.get("Warenkorb.bestellstatus").toString());
+                updateWarekorb.execute();
+            }
+            else throw new SQLException(getClass().getName() + ": Insuffiziente Rechte");
+        }
     }
 
     @Override
