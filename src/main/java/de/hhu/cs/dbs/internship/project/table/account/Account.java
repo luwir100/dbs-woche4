@@ -47,7 +47,7 @@ public class Account extends Table {
         if (Project.getInstance().getData().get("rights").toString().equals("angestellter")){
             Project.getInstance().getConnection().getRawConnection().setAutoCommit(false);
 
-            String s = "SELECT COUNT(*) FROM Adresse";
+            String s = "SELECT MAX(ID) FROM Adresse";
             PreparedStatement countAdress = Project.getInstance().getConnection().prepareStatement(s);
             countAdress.execute();
             int adresseID = countAdress.getResultSet().getInt(1) + 1;
@@ -99,10 +99,6 @@ public class Account extends Table {
         }
         // new record needed since email(PK) changed
         else{
-            // update Data
-            Project.getInstance().getData().put("email",newData.get("Kunde.email").toString());
-            Project.getInstance().getData().put("passwort",newData.get("Kunde.passwort").toString());
-
             String s = "INSERT INTO Kunde VALUES(?," + adresseID + ",?,?,?)";
 
             PreparedStatement insertKunde = Project.getInstance().getConnection().prepareStatement(s);
@@ -125,6 +121,10 @@ public class Account extends Table {
         }
         Project.getInstance().getConnection().getRawConnection().commit();
         Project.getInstance().getConnection().getRawConnection().setAutoCommit(true);
+
+        // update Data
+        Project.getInstance().getData().put("email",newData.get("Kunde.email").toString());
+        Project.getInstance().getData().put("passwort",newData.get("Kunde.passwort").toString());
     }
 
     @Override

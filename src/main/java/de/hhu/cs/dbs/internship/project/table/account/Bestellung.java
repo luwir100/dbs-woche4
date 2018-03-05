@@ -40,7 +40,7 @@ public class Bestellung extends Table{
 
     @Override
     public void insertRowWithData(Data data) throws SQLException {
-        int newID = Project.getInstance().getConnection().executeQuery("SELECT COUNT(*) FROM Warenkorb").getInt(1) +1;
+        int newID = Project.getInstance().getConnection().executeQuery("SELECT MAX(ID) FROM Warenkorb").getInt(1) +1;
 
         String s = "INSERT INTO Warenkorb VALUES(" + newID + ",'" + Project.getInstance().getData().get("email").toString() +"',date('now'),'in Bearbeitung')";
         PreparedStatement insertWarenkorb = Project.getInstance().getConnection().prepareStatement(s);

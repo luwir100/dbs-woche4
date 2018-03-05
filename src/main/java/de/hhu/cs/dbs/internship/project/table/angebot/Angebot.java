@@ -52,9 +52,9 @@ public class Angebot extends Table {
     public void insertRowWithData(Data data) throws SQLException {
         if(Project.getInstance().getData().get("rights").toString().equals("angestellter")){
             Project.getInstance().getConnection().getRawConnection().setAutoCommit(false);
-            int bildID = Project.getInstance().getConnection().executeQuery("SELECT COUNT(*) FROM Bild").getInt(1) +1;
-            int angebotID = Project.getInstance().getConnection().executeQuery("SELECT COUNT(*) FROM Angebot").getInt(1)+1;
-            int artikelID = Project.getInstance().getConnection().executeQuery("SELECT COUNT(*) FROM Artikel").getInt(1)+1;
+            int bildID = Project.getInstance().getConnection().executeQuery("SELECT MAX(ID) FROM Bild").getInt(1) +1;
+            int angebotID = Project.getInstance().getConnection().executeQuery("SELECT MAX(ID) FROM Angebot").getInt(1)+1;
+            int artikelID = Project.getInstance().getConnection().executeQuery("SELECT MAX(ID) FROM Artikel").getInt(1)+1;
 
             String s = "INSERT INTO  VALUES(" + artikelID + ",?,?)";
             PreparedStatement insertArtikel = Project.getInstance().getConnection().prepareStatement(s);

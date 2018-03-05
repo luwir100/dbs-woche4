@@ -26,7 +26,7 @@ public class Newsletter extends Table{
     @Override
     public void insertRowWithData(Data data) throws SQLException {
         if(Project.getInstance().getData().get("rights").toString().equals("angestellter")){
-            int newsID = Project.getInstance().getConnection().executeQuery("SELECT COUNT(*) FROM Newsletter").getInt(1) +1;
+            int newsID = Project.getInstance().getConnection().executeQuery("SELECT MAX(ID) FROM Newsletter").getInt(1) +1;
             System.out.println(data);
 
             String s = "INSERT INTO Newsletter VALUES(?,?,?,?,date('now'))";

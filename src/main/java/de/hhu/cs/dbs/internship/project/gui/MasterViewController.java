@@ -3,10 +3,7 @@ package de.hhu.cs.dbs.internship.project.gui;
 import com.alexanderthelen.applicationkit.database.Table;
 import com.alexanderthelen.applicationkit.gui.TableViewController;
 import com.alexanderthelen.applicationkit.gui.ViewController;
-import de.hhu.cs.dbs.internship.project.table.account.Account;
-import de.hhu.cs.dbs.internship.project.table.account.Bestellung;
-import de.hhu.cs.dbs.internship.project.table.account.Inhalte;
-import de.hhu.cs.dbs.internship.project.table.account.Premiumstatus;
+import de.hhu.cs.dbs.internship.project.table.account.*;
 import de.hhu.cs.dbs.internship.project.table.angebot.Angebot;
 import de.hhu.cs.dbs.internship.project.table.newsletter.Anmeldungen;
 import de.hhu.cs.dbs.internship.project.table.newsletter.Newsletter;
@@ -53,6 +50,18 @@ public class MasterViewController extends com.alexanderthelen.applicationkit.gui
         try{
             tableViewController = TableViewController.createWithNameAndTable("bestellungen", table);
             tableViewController.setTitle("Bestellungen");
+        }catch (IOException e){
+            tableViewController = null;
+        }
+        subTreeItem = new TreeItem<>(tableViewController);
+        treeItem.getChildren().add(subTreeItem);
+
+        // Account.Lieferabos
+        table = new Lieferabos();
+        table.setTitle("Lieferabos");
+        try{
+            tableViewController = TableViewController.createWithNameAndTable("lieferabos", table);
+            tableViewController.setTitle("Lieferabos");
         }catch (IOException e){
             tableViewController = null;
         }
