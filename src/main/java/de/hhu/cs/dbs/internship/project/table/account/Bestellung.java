@@ -72,9 +72,24 @@ public class Bestellung extends Table{
 
     @Override
     public void deleteRowWithData(Data data) throws SQLException {
+        Project.getInstance().getConnection().getRawConnection().setAutoCommit(false);
+        if (isLieferabo(data)){
+            String  s = "DELETE FROM Lieferabo WHERE warenkorbID=" + data.get("Warenkorb.ID").toString();
+
+            PreparedStatement deleteLieferabo = Project.getInstance().getConnection().prepareStatement(s);
+            deleteLieferabo.execute();
+        }
         String s = "DELETE FROM Warenkorb WHERE Warenkorb.ID =" + Integer.parseInt(data.get("Warenkorb.ID").toString());
 
         PreparedStatement deleteWarenkorb = Project.getInstance().getConnection().prepareStatement(s);
         deleteWarenkorb.execute();
+
+        Project.getInstance().getConnection().getRawConnection().commit();
+        Project.getInstance().getConnection().getRawConnection().setAutoCommit(true);
+    }
+    private boolean isLieferabo(Data data) throws SQLException {
+        String s = "SELECT COUNT(*) FROM Lieferabo WHERE warenkorbID=" + data.get("Warenkorb.ID").toString();
+
+        return Project.getInstance().getConnection().executeQuery(s).getInt(1) > 0;
     }
 }
