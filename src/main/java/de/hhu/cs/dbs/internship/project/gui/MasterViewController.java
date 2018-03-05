@@ -6,6 +6,7 @@ import com.alexanderthelen.applicationkit.gui.ViewController;
 import de.hhu.cs.dbs.internship.project.table.account.Account;
 import de.hhu.cs.dbs.internship.project.table.account.Bestellung;
 import de.hhu.cs.dbs.internship.project.table.account.Inhalte;
+import de.hhu.cs.dbs.internship.project.table.account.Premiumstatus;
 import de.hhu.cs.dbs.internship.project.table.angebot.Angebot;
 import de.hhu.cs.dbs.internship.project.table.newsletter.Anmeldungen;
 import de.hhu.cs.dbs.internship.project.table.newsletter.Newsletter;
@@ -64,6 +65,18 @@ public class MasterViewController extends com.alexanderthelen.applicationkit.gui
         try{
             tableViewController = TableViewController.createWithNameAndTable("inhalte", table);
             tableViewController.setTitle("Inhalte");
+        }catch (IOException e){
+            tableViewController = null;
+        }
+        subTreeItem = new TreeItem<>(tableViewController);
+        treeItem.getChildren().add(subTreeItem);
+
+        // Account.Premiumstatus
+        table = new Premiumstatus();
+        table.setTitle("Premiumstatus");
+        try{
+            tableViewController = TableViewController.createWithNameAndTable("premiumstatus", table);
+            tableViewController.setTitle("Premiumstatus");
         }catch (IOException e){
             tableViewController = null;
         }

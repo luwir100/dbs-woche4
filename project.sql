@@ -32,7 +32,7 @@ CREATE TABLE "Lieferdienst" ( `bezeichnung` TEXT CHECK(bezeichnung LIKE '_%'), `
 
 CREATE TABLE "Newsletter" ( `ID` INTEGER PRIMARY KEY AUTOINCREMENT, `angestellterKundeEmail` TEXT NOT NULL, `betreff` TEXT NOT NULL CHECK(betreff LIKE '_%'), `text` TEXT NOT NULL CHECK(text LIKE '_%'), `datum` VARCHAR NOT NULL CHECK(date(datum) IS NOT NULL), FOREIGN KEY(`angestellterKundeEmail`) REFERENCES `Angestellter`(`kundeEmail`) );
 
-CREATE TABLE "Premiumkunde" ( `kundeEmail` TEXT, `studentenausweis` BLOB CHECK(studentenausweis IS NOT NULL OR gebuehr = 1), `gebuehr` INTEGER NOT NULL CHECK(gebuehr = 0 || gebuehr = 1), `ablaufdatum` VARCHAR NOT NULL CHECK(date(ablaufdatum) IS NOT NULL), FOREIGN KEY(`kundeEmail`) REFERENCES `Kunde`(`email`), PRIMARY KEY(`kundeEmail`) );
+CREATE TABLE "Premiumkunde" ( `kundeEmail` TEXT, `studentenausweis` BLOB CHECK(studentenausweis IS NOT NULL OR gebuehr = 1), `gebuehr` INTEGER NOT NULL CHECK(gebuehr = 0 || gebuehr = 1), `ablaufdatum` VARCHAR NOT NULL CHECK(date(ablaufdatum) IS NOT NULL), 'status' TEXT NOT NULL CHECK(status='aktiv' OR status='in Bearbeitung'), FOREIGN KEY(`kundeEmail`) REFERENCES `Kunde`(`email`), PRIMARY KEY(`kundeEmail`) );
 
 CREATE TABLE "Schlagwort" ( `wort` TEXT collate nocase CHECK(wort GLOB '*[a-zA-Z]' AND LENGTH(wort) > 0), PRIMARY KEY(`wort`) );
 
@@ -234,5 +234,5 @@ INSERT INTO zustellen(warenkorbID,lieferdienstBezeichnung,datum) VALUES(6,'Packe
 INSERT INTO Bild(id,artikelID,name,bild) VALUES(1,1,'banana',readfile('banana-icon.png'));
 INSERT INTO Bild(id,artikelID,name,bild) VALUES(2,8,'kartoffel',readfile('kartoffel-icon.png'));
 
-INSERT INTO Premiumkunde(kundeEmail,studentenausweis,gebuehr,ablaufdatum) VALUES ('viho00@xaj.org',readfile('ausweis-icon.png'),0,'2020-10-20');
-INSERT INTO Premiumkunde(kundeEmail,studentenausweis,gebuehr,ablaufdatum) VALUES ('isfi000@web.de',NULL,1,'2019-01-21');
+INSERT INTO Premiumkunde(kundeEmail,studentenausweis,gebuehr,ablaufdatum,status) VALUES ('viho00@xaj.org',readfile('ausweis-icon.png'),0,'2020-10-20','aktiv');
+INSERT INTO Premiumkunde(kundeEmail,studentenausweis,gebuehr,ablaufdatum,status) VALUES ('isfi000@web.de',NULL,1,'2019-01-21','aktiv');
