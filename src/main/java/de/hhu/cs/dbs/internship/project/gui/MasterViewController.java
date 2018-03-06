@@ -4,10 +4,7 @@ import com.alexanderthelen.applicationkit.database.Table;
 import com.alexanderthelen.applicationkit.gui.TableViewController;
 import com.alexanderthelen.applicationkit.gui.ViewController;
 import de.hhu.cs.dbs.internship.project.table.account.*;
-import de.hhu.cs.dbs.internship.project.table.angebot.Angebot;
-import de.hhu.cs.dbs.internship.project.table.angebot.Artikel;
-import de.hhu.cs.dbs.internship.project.table.angebot.Bestand;
-import de.hhu.cs.dbs.internship.project.table.angebot.Schlagwortsuche;
+import de.hhu.cs.dbs.internship.project.table.angebot.*;
 import de.hhu.cs.dbs.internship.project.table.newsletter.Anmeldungen;
 import de.hhu.cs.dbs.internship.project.table.newsletter.Newsletter;
 import javafx.scene.control.TreeItem;
@@ -144,6 +141,17 @@ public class MasterViewController extends com.alexanderthelen.applicationkit.gui
         subTreeItem = new TreeItem<>(tableViewController);
         treeItem.getChildren().add(subTreeItem);
 
+        // Bestand.Schlagwort
+        table = new Schlagwort();
+        table.setTitle("Schlagwort");
+        try{
+            tableViewController = TableViewController.createWithNameAndTable("schlagwort", table);
+            tableViewController.setTitle("Schlagwort");
+        }catch (IOException e){
+            tableViewController = null;
+        }
+        subTreeItem = new TreeItem<>(tableViewController);
+        treeItem.getChildren().add(subTreeItem);
 
         // Newsletter
         table = new Newsletter();
