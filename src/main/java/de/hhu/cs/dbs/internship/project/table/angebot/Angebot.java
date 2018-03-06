@@ -52,9 +52,4 @@ public class Angebot extends Table {
         }
         else throw new SQLException(getClass().getName() + ": insuffiziente Rechte");
     }
-    private boolean artikleHasBild(int artikelID) throws SQLException {
-        String s = "SELECT COUNT(*) FROM Bild WHERE artikelID=" + artikelID;
-
-        return Project.getInstance().getConnection().executeQuery(s).getInt(1) > 0;
-    }
 }

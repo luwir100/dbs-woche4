@@ -5,6 +5,7 @@ import com.alexanderthelen.applicationkit.gui.TableViewController;
 import com.alexanderthelen.applicationkit.gui.ViewController;
 import de.hhu.cs.dbs.internship.project.table.account.*;
 import de.hhu.cs.dbs.internship.project.table.angebot.Angebot;
+import de.hhu.cs.dbs.internship.project.table.angebot.Artikel;
 import de.hhu.cs.dbs.internship.project.table.angebot.Bestand;
 import de.hhu.cs.dbs.internship.project.table.newsletter.Anmeldungen;
 import de.hhu.cs.dbs.internship.project.table.newsletter.Newsletter;
@@ -117,6 +118,19 @@ public class MasterViewController extends com.alexanderthelen.applicationkit.gui
         }
         subTreeItem = new TreeItem<>(tableViewController);
         treeItem.getChildren().add(subTreeItem);
+
+        // Bestand.Artikel
+        table = new Artikel();
+        table.setTitle("Artikel");
+        try{
+            tableViewController = TableViewController.createWithNameAndTable("artikel", table);
+            tableViewController.setTitle("Artikel");
+        }catch (IOException e){
+            tableViewController = null;
+        }
+        subTreeItem = new TreeItem<>(tableViewController);
+        treeItem.getChildren().add(subTreeItem);
+
 
         // Newsletter
         table = new Newsletter();
