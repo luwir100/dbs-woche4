@@ -7,6 +7,7 @@ import de.hhu.cs.dbs.internship.project.table.account.*;
 import de.hhu.cs.dbs.internship.project.table.angebot.Angebot;
 import de.hhu.cs.dbs.internship.project.table.angebot.Artikel;
 import de.hhu.cs.dbs.internship.project.table.angebot.Bestand;
+import de.hhu.cs.dbs.internship.project.table.angebot.Schlagwortsuche;
 import de.hhu.cs.dbs.internship.project.table.newsletter.Anmeldungen;
 import de.hhu.cs.dbs.internship.project.table.newsletter.Newsletter;
 import javafx.scene.control.TreeItem;
@@ -125,6 +126,18 @@ public class MasterViewController extends com.alexanderthelen.applicationkit.gui
         try{
             tableViewController = TableViewController.createWithNameAndTable("artikel", table);
             tableViewController.setTitle("Artikel");
+        }catch (IOException e){
+            tableViewController = null;
+        }
+        subTreeItem = new TreeItem<>(tableViewController);
+        treeItem.getChildren().add(subTreeItem);
+
+        // Bestand.Schlagwortsuche
+        table = new Schlagwortsuche();
+        table.setTitle("Schlagwortsuche");
+        try{
+            tableViewController = TableViewController.createWithNameAndTable("schlagwortsuche", table);
+            tableViewController.setTitle("Schlagwortsuche");
         }catch (IOException e){
             tableViewController = null;
         }
