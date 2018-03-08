@@ -153,6 +153,18 @@ public class MasterViewController extends com.alexanderthelen.applicationkit.gui
         subTreeItem = new TreeItem<>(tableViewController);
         treeItem.getChildren().add(subTreeItem);
 
+        // Bestand.Empfehlung
+        table = new Empfehlungen();
+        table.setTitle("Empfehlungen");
+        try {
+            tableViewController = TableViewController.createWithNameAndTable("empfehlungen", table);
+            tableViewController.setTitle("Empfehlungen");
+        } catch (IOException e) {
+            tableViewController = null;
+        }
+        subTreeItem = new TreeItem<>(tableViewController);
+        treeItem.getChildren().add(subTreeItem);
+
         // Newsletter
         table = new Newsletter();
         table.setTitle("Newsletter");
