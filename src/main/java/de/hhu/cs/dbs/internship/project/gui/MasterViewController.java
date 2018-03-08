@@ -7,6 +7,7 @@ import de.hhu.cs.dbs.internship.project.table.account.*;
 import de.hhu.cs.dbs.internship.project.table.angebot.*;
 import de.hhu.cs.dbs.internship.project.table.newsletter.Anmeldungen;
 import de.hhu.cs.dbs.internship.project.table.newsletter.Newsletter;
+import de.hhu.cs.dbs.internship.project.table.newsletter.NewsletterEmpfehlungen;
 import javafx.scene.control.TreeItem;
 
 import java.io.IOException;
@@ -189,17 +190,18 @@ public class MasterViewController extends com.alexanderthelen.applicationkit.gui
         }
         subTreeItem = new TreeItem<>(tableViewController);
         treeItem.getChildren().add(subTreeItem);
-        /*
-        table = new Favorites();
-        table.setTitle("Favoriten");
-        try {
-            tableViewController = TableViewController.createWithNameAndTable("favorites", table);
-            tableViewController.setTitle("Favoriten");
-        } catch (IOException e) {
+
+        // Newsletter.Empfehlungen
+        table = new NewsletterEmpfehlungen();
+        table.setTitle("Empfehlungen");
+        try{
+            tableViewController = TableViewController.createWithNameAndTable("empfehlungen", table);
+            tableViewController.setTitle("Empfehlungen");
+        }catch (IOException e){
             tableViewController = null;
         }
         subTreeItem = new TreeItem<>(tableViewController);
-        treeItem.getChildren().add(subTreeItem);*/
+        treeItem.getChildren().add(subTreeItem);
 
         return treeItems;
     }
