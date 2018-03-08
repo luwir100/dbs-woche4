@@ -5,6 +5,7 @@ import com.alexanderthelen.applicationkit.database.Table;
 import de.hhu.cs.dbs.internship.project.Project;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Lieferabos extends Table{
@@ -82,9 +83,10 @@ public class Lieferabos extends Table{
         deleteLieferabo.execute();
     }
     private boolean isPremiumkunde() throws SQLException {
-        String s =  "SELECT COUNT(*) FROM Premiumkunde WHERE " +
+        String s =  "SELECT status FROM Premiumkunde WHERE " +
                     "kundeEmail ='" + Project.getInstance().getData().get("email").toString() + "'";
 
-        return Project.getInstance().getConnection().executeQuery(s).getInt(1) > 0;
+        ResultSet res = Project.getInstance().getConnection().executeQuery(s);
+        return !res.isClosed() && res.getString(1).equals("aktiv");
     }
 }
