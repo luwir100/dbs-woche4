@@ -15,13 +15,15 @@ public class Bestellung extends Table{
             if(s == null || s.isEmpty()){
                 return "SELECT Warenkorb.ID,kundeEmail as Besitzer, bestelldatum, bestellstatus " +
                         "FROM Warenkorb " +
-                        "WHERE bestellstatus <> 'in Bearbeitung' AND kundeEmail NOT IN (SELECT kundeEmail FROM Angestellter " +
+                        //"WHERE bestellstatus <> 'in Bearbeitung' AND kundeEmail NOT IN (SELECT kundeEmail FROM Angestellter " +
+                        "WHERE kundeEmail NOT IN (SELECT kundeEmail FROM Angestellter " +
                         "WHERE kundeEmail <>'" + Project.getInstance().getData().get("email").toString() +"')";
             }
             else{
                 return "SELECT Warenkorb.ID,kundeEmail as Besitzer, bestelldatum, bestellstatus " +
                         "FROM Warenkorb " +
-                        "WHERE bestellstatus <> 'in Bearbeitung' AND kundeEmail LIKE '%" + s + "%' AND kundeEmail NOT IN " +
+                        //"WHERE bestellstatus <> 'in Bearbeitung' AND kundeEmail LIKE '%" + s + "%' AND kundeEmail NOT IN " +
+                        "WHERE kundeEmail LIKE '%" + s + "%' AND kundeEmail NOT IN " +
                         "(SELECT kundeEmail FROM Angestellter " +
                         "WHERE kundeEmail <>'" + Project.getInstance().getData().get("email").toString() +"')";
             }

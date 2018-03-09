@@ -53,7 +53,6 @@ public class Artikel extends Table {
         }
         else throw new SQLException(getClass().getName() + ": insuffiziente Rechte");
     }
-
     @Override
     public void updateRowWithData(Data oldData, Data newData) throws SQLException {
         if(Project.getInstance().getData().get("rights").toString().equals("angestellter")){
@@ -80,6 +79,12 @@ public class Artikel extends Table {
 
                     updateBild.execute();
                 }
+            }
+            if(newData.get("Bild.bild") == null && (newData.get("Bild.Bildname") == null
+                    || newData.get("Bild.Bildname").toString().isEmpty())){
+                s = "DELETE FROM Bild WHERE artikelID=" + newData.get("Artikel.ID");
+                PreparedStatement deleteBild = Project.getInstance().getConnection().prepareStatement(s);
+                deleteBild.execute();
             }
             s = "UPDATE Artikel SET bezeichnung=?,beschreibung=? WHERE ID=" + oldData.get("Artikel.ID");
             PreparedStatement updateArtikel = Project.getInstance().getConnection().prepareStatement(s);

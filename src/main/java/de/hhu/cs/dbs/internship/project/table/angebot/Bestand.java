@@ -42,6 +42,7 @@ public class Bestand extends Table {
 
     @Override
     public void updateRowWithData(Data oldData, Data newData) throws SQLException {
+        // keine Entitäten sondern nur Beziehungen zwischen ihnen werden geändert. Also ist update so möglich
         deleteRowWithData(oldData);
         insertRowWithData(newData);
     }

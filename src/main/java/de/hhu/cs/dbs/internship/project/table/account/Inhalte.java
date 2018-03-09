@@ -83,23 +83,12 @@ public class Inhalte extends Table {
             throw new SQLException(getClass().getName() + ": fremder Warenkorb: Zugriff verweigert.");
         }
         else{
+            /*  Da hier nur Beziehungen zwischen Entitäten und nicht sie selbst manipuliert werden,
+            *   kann man ohne Sorge, dass mehr geändert wird als beabsichtigt, die momentane Reihe löschen
+            *   und eine neue einfügen.
+             */
             deleteRowWithData(oldData);
             insertRowWithData(newData);
-
-            /*
-            String s =  "UPDATE inw SET warenkorbID=?, angebotID=?, anbieterBezeichnung=?, anzahl=? " +
-                        "WHERE warenkorbID=? AND angebotID=? AND anbieterBezeichnung=?";
-
-            PreparedStatement updateINW = Project.getInstance().getConnection().prepareStatement(s);
-            updateINW.setInt(1, Integer.parseInt(newData.get("inw.warenkorbID").toString()));
-            updateINW.setInt(2, Integer.parseInt(newData.get("inw.AngebotID").toString()));
-            updateINW.setString(3, newData.get("inw.Anbieter").toString());
-            updateINW.setInt(4, Integer.parseInt(newData.get("inw.anzahl").toString()));
-            updateINW.setInt(5, Integer.parseInt(oldData.get("inw.warenkorbID").toString()));
-            updateINW.setInt(6, Integer.parseInt(oldData.get("inw.AngebotID").toString()));
-            updateINW.setString(7, oldData.get("inw.Anbieter").toString());
-
-            updateINW.execute();*/
         }
     }
 

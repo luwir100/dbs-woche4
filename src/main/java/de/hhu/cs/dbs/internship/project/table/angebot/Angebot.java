@@ -39,8 +39,16 @@ public class Angebot extends Table {
 
     @Override
     public void updateRowWithData(Data oldData, Data newData) throws SQLException {
-        deleteRowWithData(oldData);
-        insertRowWithData(newData);
+        if(Project.getInstance().getData().get("rights").toString().equals("angestellter")){
+            String s = "UPDATE Angebot SET artikelID=?, preis=? WHERE ID=?";
+
+            PreparedStatement updateAngebot = Project.getInstance().getConnection().prepareStatement(s);
+            updateAngebot.setInt(1, Integer.parseInt(newData.get("Angebot.artikelID").toString()));
+            updateAngebot.setString(2, newData.get("Angebot.preis").toString());
+            updateAngebot.setInt(3, Integer.parseInt(oldData.get("Angebot.ID").toString()));
+            updateAngebot.execute();
+        }
+        else throw new SQLException(getClass().getName() + ": insuffiziente Rechte");
     }
 
     @Override

@@ -32,8 +32,6 @@ public class Premiumstatus extends Table{
         if (hasEntry()) throw new SQLException(getClass().getName() + ": bereits Premiumkunde");
         else {
             String s = "INSERT INTO Premiumkunde VALUES(?,?,?,date('now'),'in Bearbeitung')";
-            System.out.println(data.get("Premiumkunde.studentenausweis"));
-            System.out.println(data.get("Premiumkunde.studentenausweis").toString());
 
             PreparedStatement insertPremiumkunde = Project.getInstance().getConnection().prepareStatement(s);
             insertPremiumkunde.setString(1, Project.getInstance().getData().get("email").toString());

@@ -58,14 +58,6 @@ public class Schlagwort extends Table{
             Project.getInstance().getConnection().getRawConnection().setAutoCommit(false);
 
             String s;
-            /*
-            //  UPDATING PKs is bad and not required
-            String s = "UPDATE Schlagwort SET wort=? WHERE wort=?";
-            PreparedStatement updateSchlagwort = Project.getInstance().getConnection().prepareStatement(s);
-            updateSchlagwort.setString(1, newData.get("Schlagwort.Schlagwort").toString());
-            updateSchlagwort.setString(2, oldData.get("Schlagwort.Schlagwort").toString());
-            updateSchlagwort.execute();
-            */
             if(oldData.get("besitzt.artikelID") != null && newData.get("besitzt.artikelID") != null){
                 s = "UPDATE besitzt SET artikelID=?,schlagwortWort=? WHERE schlagwortWort=? AND artikelID=?";
                 PreparedStatement updateBesitzt = Project.getInstance().getConnection().prepareStatement(s);

@@ -36,7 +36,6 @@ public class Account extends Table {
 
     @Override
     public String getSelectQueryForRowWithData(Data data) throws SQLException {
-        //  für Angestellte Gehalt/Jobbezeichnung anzeigen lassen?
         return "SELECT vorname,nachname,passwort,email,plz,ort,straße,hausnummer " +
                 "FROM Kunde JOIN Adresse ON Kunde.adresseID=Adresse.ID " +
                 "WHERE Kunde.email ='" + data.get("Kunde.email") + "'";
@@ -129,11 +128,6 @@ public class Account extends Table {
 
     @Override
     public void deleteRowWithData(Data data) throws SQLException {
-        /* Check für Recht hier nicht notwendig da:
-        *   - Kunden sehen nur ihr eigenes Account
-        *   - Angestellte sehen alle Accounts, die nicht ihren Kollegen gehören
-        *   - Somit kann jeder alles löschen, was er selbst sieht
-        */
         String s = "DELETE FROM Kunde WHERE Kunde.email='" + data.get("Kunde.email").toString() + "'";
 
         PreparedStatement deleteKunde = Project.getInstance().getConnection().prepareStatement(s);
