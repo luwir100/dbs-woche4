@@ -21,7 +21,6 @@ public class Empfehlungen extends Table {
 
     @Override
     public String getSelectQueryForRowWithData(Data data) throws SQLException {
-        System.out.println(data);
         return  "SELECT * FROM empfiehlt WHERE artikel1ID=" + data.get("empfiehlt.artikel1ID") +
                 " AND artikel2ID=" + data.get("empfiehlt.artikel2ID");
     }
